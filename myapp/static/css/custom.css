@@ -1,0 +1,79 @@
+img{
+	width:40%;
+	height:30%;
+}
+button{
+	width: 100%;
+
+}
+
+footer{
+	margin-top: 3%;
+	border: 2px solid rgb(52, 58, 64);
+	background-color: rgb(52, 58, 64);
+	padding:0.8%;
+}
+
+a{
+	text-decoration: none;
+	color:white;
+
+}
+
+a:hover{
+	color: white;
+}
+
+ul{
+	list-style: none;
+	color:white;
+}
+
+#message1, #message2{
+	border: 2px solid rgb(52, 58, 64);
+	padding: 2%;
+	margin-top: 0.2%;
+	margin-bottom: 2%;
+	border-radius: 4% 4%;
+}
+
+#message2{
+	margin-left: 0%;
+}
+
+#message1{
+	text-align: right;
+	margin-right: 0%;
+	margin-top: 1%;
+	
+}
+
+#bigBoxMessage{
+	height: 500px;
+	width: 100%;
+	margin-top: 2%;
+	border: 2px solid black;
+	overflow-y: scroll;
+	padding-top: 50%;
+
+
+}
+
+#boxInput{
+	padding-bottom: 0.3%;
+	padding-top: 0.5%;
+	width: 100%;
+	border: 2px solid rgb(52, 58, 64);
+	background-color: rgb(52, 58, 64);
+}
+
+#box{
+	margin-top: 5%;
+	margin-bottom: 3.3%;
+}
+
+#description{
+	margin-right: 0%;
+	margin-top: 5%;
+	text-align: center;
+}
