@@ -1,5 +1,6 @@
 import json
 import urllib.request
+import settings
 
 class GeocodingApiManager:
     """ relation with geocoding api """
@@ -8,21 +9,25 @@ class GeocodingApiManager:
         """ class initialization """
         self.dictionnary = {}
         self.apiKey = "AIzaSyAC-uJA9vLh5Ne0mipvEAn157p1y_gVHPU"
-        self.arrayPlace = {"openclassroom": "7%20CITE%20DE%20PARADIS", "palais royal": "Rue%20Brederode,%2016%201000%20Bruxelles"}
+        self.arrayPlace = settings.DictPlace
 
-    def load_json(self, address, name):
+    def load_json_geocoding(self, address, name):
         """ method for loading the json """
 
         url = "https://maps.googleapis.com/maps/api/geocode/json?address="+ address + "&key=" + self.apiKey
         response = urllib.request.urlopen(url)
         data = json.loads(response.read())
-        self.dictionnary = data
-        self.dictionnary["name"] = name
+        self.dictionnary[name] = data
 
         return self.dictionnary
 
-    def create_file(self):
+    def create_file_geocododing(self):
         """ method for create the json with all informations """
         arrayPlace = self.arrayPlace
         for name, address in arrayPlace.items():
-            a = self.load_json(address, name)
+            file_geocoding = self.load_json_geocoding(address, name)
+        json.dumps(self.dictionnary)
+        return self.dictionnary
+
+a = GeocodingApiManager()
+a.create_file_geocododing()
