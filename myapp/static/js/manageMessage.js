@@ -58,6 +58,27 @@ function createMapElement() {
   return [wrapper, newPara1];
 }
 
+function hidden_loader(a) {
+  a.classList.add("hidden");
+}
+
+function createLoaderElement() {
+  let loader = document.createElement("div");
+  loader.classList.add("loader");
+  placeMessage.appendChild(loader);
+  setTimeout(function(){hidden_loader(loader)}, 1000);
+
+  return loader
+
+}
+
+
+
+function loader_animation() {
+  setTimeout(hidden_loader, 1000);
+}
+
+
 function createMap(center) {
   let [wrapper, newPara1] = createMapElement();
   placeMessage.appendChild(wrapper);
@@ -139,16 +160,20 @@ function getcontent_oc() {
   request.send();
 }
 
+
+
 function onSubmit(e) {
   e.preventDefault();
   placeMessage.appendChild(createMessage());
 
   if (message.value.includes("OpenClassrooms")) {
-    get_pos_location();
-    getcontent_oc();
+    createLoaderElement();
+    setTimeout(get_pos_location, 1000);
+    setTimeout(getcontent_oc, 1000);
   }
   else {
-    display_message_error();
+    createLoaderElement();
+    setTimeout(display_message_error, 1000);
   }
   scrollToBottom();
   message.value = "";
