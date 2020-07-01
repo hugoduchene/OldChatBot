@@ -127,7 +127,7 @@ function get_pos_location() {
 
   request.open(
     "GET",
-    "http://127.0.0.1:5000/api/content/geocoding"
+    "https://old-chat-bot.herokuapp.com/api/content/geocoding"
   );
 
   request.send();
@@ -148,7 +148,7 @@ function getcontent_oc() {
 
   request.open(
     "GET",
-    "http://127.0.0.1:5000/api/content/description"
+    "https://old-chat-bot.herokuapp.com/api/content/description"
   );
 
   request.send();

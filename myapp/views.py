@@ -19,11 +19,6 @@ def display_api_geocoding():
 def display_api_content():
     return jsonify(mediawiki_api.create_file_content())
 
-@app.route('/index')
+@app.route('/')
 def display_index():
     return render_template("index.html")
-
-
-
-"""if __name__ == "__main__":
-    app.run(debug=False)"""
