@@ -1,6 +1,6 @@
 import json
 import urllib.request
-import settings
+from .settings import DictPlace
 
 class GeocodingApiManager:
     """ relation with geocoding api """
@@ -9,7 +9,7 @@ class GeocodingApiManager:
         """ class initialization """
         self.dictionnary = {}
         self.apiKey = "AIzaSyAC-uJA9vLh5Ne0mipvEAn157p1y_gVHPU"
-        self.arrayPlace = settings.DictPlace
+        self.arrayPlace = DictPlace
 
     def load_json_geocoding(self, address, name):
         """ method for loading the json """

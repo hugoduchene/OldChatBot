@@ -1,6 +1,6 @@
 import json
 import urllib.request
-import settings
+from .settings import DictName
 
 class MediawikiApiManager:
     """ relation with mediawiki api """
@@ -8,7 +8,7 @@ class MediawikiApiManager:
     def __init__(self):
         """ class initialization """
         self.dictionnary = {}
-        self.nameArray = settings.DictName
+        self.nameArray = DictName
 
     def load_json_content(self, titleWiki):
         """ method for loading the json with pageid """

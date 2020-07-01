@@ -68,14 +68,8 @@ function createLoaderElement() {
   placeMessage.appendChild(loader);
   setTimeout(function(){hidden_loader(loader)}, 1000);
 
-  return loader
+  return loader;
 
-}
-
-
-
-function loader_animation() {
-  setTimeout(hidden_loader, 1000);
 }
 
 

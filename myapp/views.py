@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask import render_template
-from geocoding_api_manager import GeocodingApiManager
-from mediawiki_api_manager import MediawikiApiManager
+from .geocoding_api_manager import GeocodingApiManager
+from .mediawiki_api_manager import MediawikiApiManager
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -25,5 +25,5 @@ def display_index():
 
 
 
-if __name__ == "__main__":
-    app.run(debug=False)
+"""if __name__ == "__main__":
+    app.run(debug=False)"""

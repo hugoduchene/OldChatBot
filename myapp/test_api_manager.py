@@ -1,4 +1,4 @@
-from geocoding_api_manager import GeocodingApiManager
+from .geocoding_api_manager import GeocodingApiManager
 import urllib.request
 from io import BytesIO
 import json
