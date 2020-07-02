@@ -59,8 +59,7 @@ ul{
 	border: 2px solid black;
 	overflow-y: scroll;
 	padding-top: 70%;
-
-
+	scroll-behavior: smooth;
 }
 
 #boxInput{

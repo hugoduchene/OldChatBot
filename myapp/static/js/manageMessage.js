@@ -58,20 +58,19 @@ function createMapElement() {
   return [wrapper, newPara1];
 }
 
-function hidden_loader(a) {
-  a.classList.add("hidden");
+function hidden_loader(load) {
+  load.classList.add("hidden");
 }
 
 function createLoaderElement() {
   let loader = document.createElement("div");
   loader.classList.add("loader");
   placeMessage.appendChild(loader);
-  setTimeout(function(){hidden_loader(loader)}, 1000);
+  /*setTimeout(function(){hidden_loader(loader)}, 1000);*/
 
   return loader;
 
 }
-
 
 function createMap(center) {
   let [wrapper, newPara1] = createMapElement();
@@ -110,50 +109,29 @@ function display_message_error() {
 
 }
 
-function get_pos_location() {
-  let request = new XMLHttpRequest();
+function callAPI(url) {
+    const request = new XMLHttpRequest();
+    const pr = new Promise((resolve, reject) => {
+        request.onreadystatechange = function () {
 
-  request.onreadystatechange = function() {
-    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-      let response = JSON.parse(this.responseText);
-      let content_location = response.openclassroom.results[0].geometry.location;
-      let content_address = response.openclassroom.results[0].formatted_address;
-      display_message_address(content_address);
-      createMap(content_location);
-      scrollToBottom();
+            if (this.readyState === XMLHttpRequest.DONE) {
+                if (this.status === 200) {
+                  const response = JSON.parse(this.responseText);
+                  resolve(response);
+                } else {
+                    reject(this.responseText)
+                }
+            }
+        }
 
-    }
-  };
-
-  request.open(
-    "GET",
-    "https://old-chat-bot.herokuapp.com/api/content/geocoding"
-  );
-
-  request.send();
+    })
+    request.open(
+        "GET",
+        url
+    );
+    request.send();
+    return pr;
 }
-
-function getcontent_oc() {
-  let request = new XMLHttpRequest();
-
-  request.onreadystatechange = function() {
-    if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-      let response = JSON.parse(this.responseText);
-      let content_oc = response.openclassroom.query.pages["5653202"].extract;
-      display_message_wiki(content_oc);
-      scrollToBottom();
-
-    }
-  };
-
-  request.open(
-    "GET",
-    "https://old-chat-bot.herokuapp.com/api/content/description"
-  );
-
-  request.send();
-}
-
 
 
 function onSubmit(e) {
@@ -161,13 +139,23 @@ function onSubmit(e) {
   placeMessage.appendChild(createMessage());
 
   if (message.value.includes("OpenClassrooms")) {
-    createLoaderElement();
-    setTimeout(get_pos_location, 1000);
-    setTimeout(getcontent_oc, 1000);
+      const loader = createLoaderElement();
+      Promise.all([callAPI('https://old-chat-bot.herokuapp.com/api/content/geocoding'), callAPI('https://old-chat-bot.herokuapp.com/api/content/description')]).then((data) =>  {
+        const content_location = data[0].openclassroom.results[0].geometry.location;
+        const content_address = data[0].openclassroom.results[0].formatted_address;
+        display_message_address(content_address);
+        createMap(content_location);
+        const content_oc = data[1].openclassroom.query.pages["5653202"].extract;
+        display_message_wiki(content_oc);
+        hidden_loader(loader);
+        scrollToBottom();
+    });
+
+
+
   }
   else {
-    createLoaderElement();
-    setTimeout(display_message_error, 1000);
+    display_message_error();
   }
   scrollToBottom();
   message.value = "";
