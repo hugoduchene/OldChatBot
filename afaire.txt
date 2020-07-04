@@ -1,0 +1,5 @@
+- parse words
+- accepte n'importe quel endroit 
+- mocks api 
+- post !
+- refaire mes apis plus ciblés

@@ -1,9 +1,11 @@
 const placeMessage = document.getElementById("bigBoxMessage");
 const message = document.querySelector("#message_text");
 
+
 function scrollToBottom() {
   placeMessage.scrollTop = placeMessage.scrollHeight;
 }
+
 
 function createMessage() {
   let wrapper = document.createElement("div");
@@ -25,6 +27,7 @@ function createMessage() {
   return wrapper;
 }
 
+
 function createMessageTwo(content) {
   let wrapper = document.createElement("div");
   wrapper.classList.add("row", "boxMessage2");
@@ -42,6 +45,7 @@ function createMessageTwo(content) {
   return wrapper
 }
 
+
 function createMapElement() {
   let wrapper = document.createElement("div");
   wrapper.classList.add("row", "boxMessage2");
@@ -58,6 +62,7 @@ function createMapElement() {
   return [wrapper, newPara1];
 }
 
+
 function hidden_loader(load) {
   load.classList.add("hidden");
 }
@@ -66,7 +71,7 @@ function createLoaderElement() {
   let loader = document.createElement("div");
   loader.classList.add("loader");
   placeMessage.appendChild(loader);
-  /*setTimeout(function(){hidden_loader(loader)}, 1000);*/
+  scrollToBottom();
 
   return loader;
 
@@ -80,6 +85,7 @@ function createMap(center) {
                 };
   return new google.maps.Map(newPara1, options);
 }
+
 
 function cleanHtml(content_character) {
   let clean_html_content = content_character.replace(/<[^>]*>/g, '');
@@ -102,63 +108,76 @@ function display_message_address(content_address) {
 }
 
 function display_message_error() {
-  let error = "Cette adresses ne peut être envoyé ou pensez à vérifier votre orthographe";
-  let message_error = createMessageTwo(error);
+  const error = "Cette adresses ne peut être envoyé ou pensez à vérifier votre orthographe";
+  const message_error = createMessageTwo(error);
   message_error.style.color = "red";
   placeMessage.appendChild(message_error);
 
 }
 
-function callAPI(url) {
-    const request = new XMLHttpRequest();
-    const pr = new Promise((resolve, reject) => {
-        request.onreadystatechange = function () {
 
-            if (this.readyState === XMLHttpRequest.DONE) {
-                if (this.status === 200) {
-                  const response = JSON.parse(this.responseText);
-                  resolve(response);
-                } else {
-                    reject(this.responseText)
+
+function postCallAPI(url, data = {}) {
+  const request = new XMLHttpRequest();
+  const formData = new FormData();
+
+  const pr = new Promise((resolve, reject) => {
+            request.onreadystatechange = function () {
+
+                if (this.readyState === XMLHttpRequest.DONE) {
+                    if (this.status === 200) {
+                      console.log(this.responseText);
+                        resolve(this.responseText)
+                    } else {
+                        reject(this.responseText)
+                    }
                 }
             }
-        }
+        })
 
-    })
-    request.open(
-        "GET",
-        url
-    );
-    request.send();
-    return pr;
-}
+        Object.entries(data).forEach(([key, value]) => {
+            formData.append(key, value)
+        })
+
+        request.open(
+            "POST",
+            url
+        );
+        request.send(formData);
+        return pr;
+    }
+
 
 
 function onSubmit(e) {
   e.preventDefault();
-  placeMessage.appendChild(createMessage());
+  const object = {message : message.value };
+  const loader = createLoaderElement();
 
-  if (message.value.includes("OpenClassrooms")) {
-      const loader = createLoaderElement();
-      Promise.all([callAPI('https://old-chat-bot.herokuapp.com/api/content/geocoding'), callAPI('https://old-chat-bot.herokuapp.com/api/content/description')]).then((data) =>  {
-        const content_location = data[0].openclassroom.results[0].geometry.location;
-        const content_address = data[0].openclassroom.results[0].formatted_address;
-        display_message_address(content_address);
-        createMap(content_location);
-        const content_oc = data[1].openclassroom.query.pages["5653202"].extract;
-        display_message_wiki(content_oc);
-        hidden_loader(loader);
-        scrollToBottom();
-    });
+  Promise.all([postCallAPI('http://127.0.0.1:5000/api/content/geocoding', object), postCallAPI('http://127.0.0.1:5000/api/content/description', object)]).then((data) => {
+    placeMessage.appendChild(createMessage());
+    data[0] = JSON.parse(data[0])
+    data[1] = JSON.parse(data[1])
 
+    const content_location = data[0].location;
+    const content_address = data[0].formatted_address;
+    display_message_address(content_address);
+    createMap(content_location);
 
+    const content_oc = data[1].content;
+    display_message_wiki(content_oc);
 
-  }
-  else {
+    hidden_loader(loader);
+    scrollToBottom();
+
+    message.value = "";
+
+  }).catch(error => {
     display_message_error();
-  }
-  scrollToBottom();
-  message.value = "";
+    hidden_loader(loader);
+    scrollToBottom();
+  })
 }
+
 
 document.querySelector("#form").addEventListener("submit", onSubmit);
