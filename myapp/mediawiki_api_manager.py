@@ -22,8 +22,8 @@ class MediawikiApiManager:
 
         return data
 
-    def create_file_content(self):
-        dict = self.load_json_content()
+    def create_file_content(self, dict = False):
+        dict = dict or self.load_json_content()
 
         pageId = dict.get("query").get("pages")
         for nbs_id in pageId:

@@ -35,10 +35,10 @@ class GeocodingApiManager:
 
         return data
 
-    def create_file_geocododing(self):
+    def create_file_geocododing(self, dict = False):
         """ method for create the json with all informations """
 
-        dict = self.load_json_geocoding()
+        dict = dict or self.load_json_geocoding()
 
         address = dict.get("results")[0].get("formatted_address")
         location = dict.get("results")[0].get("geometry").get("location")
