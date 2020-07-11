@@ -154,7 +154,7 @@ function onSubmit(e) {
   const object = {message : message.value };
   const loader = createLoaderElement();
 
-  Promise.all([postCallAPI('https://old-chat-bot.herokuapp.com/api/content/geocoding', object), postCallAPI('https://old-chat-bot.herokuapp.com/api/content/description', object)]).then((data) => {
+  Promise.all([postCallAPI('http://127.0.0.1:5000/api/content/geocoding', object), postCallAPI('http://127.0.0.1:5000/api/content/description', object)]).then((data) => {
     placeMessage.appendChild(createMessage());
     data[0] = JSON.parse(data[0])
     data[1] = JSON.parse(data[1])

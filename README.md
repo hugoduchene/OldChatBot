@@ -16,5 +16,5 @@ It's a web project realized using the mini framework flask, the fronted is manag
 ```py
 git clone https://github.com/hugoduchene/OldChatBot.git
 pip install -r requirements.txt
-python wsgi.py
+flask run
 ```
